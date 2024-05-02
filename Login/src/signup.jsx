@@ -9,8 +9,13 @@ function Signup() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();    
+    const [isChecked, setIsChecked] = useState(false);
+    const navigate = useNavigate();
 
+    const handleCheckboxChange = (e) => {
+        const { checked } = e.target;
+        setIsChecked(checked);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,19 +32,23 @@ function Signup() {
             errors.password = 'Password must be at least 6 characters long';
         }
 
+        if (!isChecked) {
+            errors.isChecked = 'Please agree to the terms and conditions.';
+        }
+
         setErrors(errors);
         // If no errors, proceed with form submission
 
         if (Object.keys(errors).length === 0) {
             // Call backend API to submit the form data
-            axios.post("http://localhost:3001/register", { name, email, password })  // make HTTP requests
-            .then(result => {
-                console.log(result) 
-                navigate('/login')    // Navigate the page
-            })
-            .catch(err => console.log(err))
+            axios.post("http://localhost:3001/register", { name, email, password, isChecked })  // make HTTP requests
+                .then(result => {
+                    console.log(result)
+                    navigate('/login')    // Navigate the page
+                })
+                .catch(err => console.log(err))
         }
-        
+
     }
 
     return (
@@ -73,7 +82,20 @@ function Signup() {
                                         />
                                         {errors.password && <span>{errors.password}</span>}
                                     </div>
-                                    <button type="submit" className="btn btn-primary">Sign Up</button>
+                                    <label style={{color:'blue', marginTop:'5px'}}>
+                                        <input
+                                            type="checkbox"
+                                            id="ischecked"
+                                            value={isChecked}
+                                            onChange={handleCheckboxChange}
+                                        />
+                                        I agree to the terms and conditions
+                                    </label>
+                                    <br/>
+                                    {errors.isChecked && <span>{errors.isChecked}</span>}
+                                    <br/>
+
+                                    <button type="submit" className="btn btn-primary" style={{marginTop:'13px'}}>Sign Up</button>
                                 </form>
                             </div>
                             <div className="card-footer text-muted text-center">

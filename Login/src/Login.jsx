@@ -15,8 +15,8 @@ function Login() {
 
         axios.post("http://localhost:3001/login", { email, password })  // make HTTP requests
             .then(result => {
-                console.log(result)
-                if (result.data === "Success") {
+                // console.log(result)
+                if (result.status === 200) {
                     navigate('/home')
                 }else{
                     window.alert("Invalid Email or Password")
@@ -48,7 +48,7 @@ function Login() {
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
                                     </div>
-                                    <button type="submit" className="btn btn-primary">Login</button>
+                                    <button type="submit" className="btn btn-primary" style={{marginTop:'13px'}}>Login</button>
                                 </form>
                             </div>
                             <div className="card-footer text-muted text-center">
